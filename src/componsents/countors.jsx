@@ -2,10 +2,17 @@
  * 页面展示
  * UI组件
  */
-import react,{Component} from "react";
+import React,{Component} from "react";
 import PropTypes from 'prop-types'
 
 export default class Counter extends Component{
+
+  static propTypes = {
+    count:PropTypes.number.isRequired,
+    increment:PropTypes.func.isRequired,
+    decrement:PropTypes.func.isRequired,
+    incrementAsync:PropTypes.func.isRequired
+  }
 
   numberRef = React.createRef()
 
@@ -32,7 +39,6 @@ export default class Counter extends Component{
     const number = this.numberRef.current.value * 1
     this.props.incrementAsync(number, 3000)
   }
-
 
 
 
