@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class app extends Component {
+export default class App extends Component {
   // 将点击次数保存到状态中
   state = {
     count:0

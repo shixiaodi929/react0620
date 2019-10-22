@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from "prop-types";
 
-export default class app extends Component {
-  // 将点击次数保存到状态中
-  state = {
-    count:0
+export default class App extends Component {
+  
+  static propTypes = {
+    store: PropTypes.object.isRequired
   }
 
   // 创建一个容器，用于保存加或减的基数（即下拉框显示的数值）
