@@ -14,11 +14,12 @@ import './login.less'
 
 const { Item } = Form 
 
+// 使用装饰器，简化代码
 @connect(
   state => ({hasLogin: state.user.hasLogin}),  // 用于显示的一般属性
   {loginAsync} // 用于更新状态的函数属性
 )
-@Form.create()    // Login = Form.create()(Login)
+@Form.create()    // 相当于Login = Form.create()(Login)
 
 class Login extends Component {
 
@@ -34,7 +35,7 @@ class Login extends Component {
         const {username, password} = values
 
         this.props.loginAsync(username, password)
-        /*
+        /*简单使用
         ajax.post('/login', values) // username=admin&password=admin
           .then((result) => {
             const {status, data: {user, token}={}, msg, xxx='abc'} = result // 嵌套解构 变量默认值
@@ -62,6 +63,7 @@ class Login extends Component {
       3). 必须小于等于12位
       4). 必须是英文、数字或下划线组成
     */
+  //  命令式验证
    // value = value.trim()
    if (value==='') {
      callback('密码必须输入')
@@ -77,7 +79,6 @@ class Login extends Component {
   }
 
   render() {
-    // console.log('Login render() ', this.props.form )
 
     const {hasLogin} = this.props
     // 如果已经登陆, 自动跳转到admin界面
@@ -154,7 +155,7 @@ class Login extends Component {
   }
 }
 
-
+//不使用装饰器的写法
 // export default connect(
 //   state => ({hasLogin: state.user.hasLogin}),  // 用于显示的一般属性
 //   {loginAsync} // 用于更新状态的函数属性

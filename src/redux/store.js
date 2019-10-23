@@ -5,7 +5,7 @@
 import { createStore, applyMiddleware } from 'redux'
 // 可以进行异步编程
 import thunk from 'redux-thunk'
-
+// 用于在开发模式下，对异步编程代码进行处理
 import {composeWithDevTools} from 'redux-devtools-extension'
 
 
