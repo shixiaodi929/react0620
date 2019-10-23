@@ -10,7 +10,7 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 
 
 import reducer from './reducters'  // 总reducer函数
-import { IS_DEV } from '../../config/index'
+import { IS_DEV } from '../config'
 
 export default createStore(
   reducer, 

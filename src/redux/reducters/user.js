@@ -7,7 +7,7 @@
 
 const _user = JSON.parse(localStorage.getItem('user_key') || '{}')
 const _token = localStorage.getItem('token_key')
-const initUser = { // 初始值从local中读取
+const initUser = { // 初始值
   user: _user,//用户信息：username和password
   token: _token,//token值：免登录用
   hasLogin: _token && _user._id // 是否已经登陆

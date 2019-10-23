@@ -5,9 +5,8 @@
 import ajax from './ajax'
 
 /* 登陆接口 */
-const reqLogin = ({username, password}) => ajax({
+export const reqLogin = ({username, password}) => ajax({
   url: '/login',
   method: 'POST',
   data: {username, password}
 })
-export default reqLogin

@@ -22,16 +22,15 @@ const { Item } = Form
 
 class Login extends Component {
 
-  handleSubmit = () => {
+  handleSubmit = (event) => {
     // 阻止默认行为（表单提交）
     event.preventDefault() 
 
     // 对表单进行统一验证
     this.props.form.validateFields((err, values) => {
-      // 验证成功，发送ajax请求
+      // 表单验证成功，发送ajax请求
       if (!err) { 
-
-
+        
         const {username, password} = values
 
         this.props.loginAsync(username, password)

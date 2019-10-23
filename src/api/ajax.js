@@ -12,12 +12,13 @@
  import axios from "axios";
 //  将json参数转换为urlenclde参数
  import qs from 'qs'
+ //  用于显示错误信息
+ import {message} from 'antd'
 //  进度条
  import NProgress from 'nprogress'
 //  进度条样式
   import 'nprogress/nprogress.css'
-//  用于显示错误信息
- import {message} from 'antd'
+
  
 
 
