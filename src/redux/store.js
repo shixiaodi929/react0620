@@ -9,7 +9,7 @@ import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 
 
-import reducer from './reducters/index'  // 总reducer函数
+import reducer from './reducters'  // 总reducer函数
 import { IS_DEV } from '../../config/index'
 
 export default createStore(

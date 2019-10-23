@@ -2,16 +2,25 @@
 登陆的一级路由组件
 */
 import React, { Component } from 'react'
+// 重定向
+import {Redirect} from 'react-router-dom'
 import { Form, Icon, Input, Button } from 'antd'
+import { connect } from 'react-redux'
 
 
-import ajax from '../../api/ajax'
+import {loginAsync} from '../../redux/action-creators/user'
 import logo from './images/logo.png'
 import './login.less'
 
-const { Item } = Form // 必须在所有import的下面
+const { Item } = Form 
 
-export default class Login extends Component {
+@connect(
+  state => ({hasLogin: state.user.hasLogin}),  // 用于显示的一般属性
+  {loginAsync} // 用于更新状态的函数属性
+)
+@Form.create()    // Login = Form.create()(Login)
+
+class Login extends Component {
 
   handleSubmit = () => {
     // 阻止默认行为（表单提交）
@@ -22,10 +31,13 @@ export default class Login extends Component {
       // 验证成功，发送ajax请求
       if (!err) { 
 
-        console.log('发ajax请求', values)
+
+        const {username, password} = values
+
+        this.props.loginAsync(username, password)
+        /*
         ajax.post('/login', values) // username=admin&password=admin
           .then((result) => {
-
             const {status, data: {user, token}={}, msg, xxx='abc'} = result // 嵌套解构 变量默认值
             console.log('xxx', xxx)
             if (status===0) {
@@ -33,8 +45,9 @@ export default class Login extends Component {
             } else {
               console.log('登陆失败', msg)
             }
-            
           })
+        */
+        
           
       } else {
         // 什么都不用写
@@ -65,7 +78,16 @@ export default class Login extends Component {
   }
 
   render() {
-    console.log('Login render() ', this.props.form )
+    // console.log('Login render() ', this.props.form )
+
+    const {hasLogin} = this.props
+    // 如果已经登陆, 自动跳转到admin界面
+    if (hasLogin) { 
+      // this.props.history.replace('/')
+      // 重定向到admin界面
+      return <Redirect to="/"/> 
+    }
+
     const { getFieldDecorator } = this.props.form;
 
 
@@ -134,8 +156,12 @@ export default class Login extends Component {
 }
 
 
-// const WrappedLogin = Form.create()(Login)
-// export default WrappedLogin
-export default Form.create()(Login)
+// export default connect(
+//   state => ({hasLogin: state.user.hasLogin}),  // 用于显示的一般属性
+//   {loginAsync} // 用于更新状态的函数属性
+// )(Form.create()(Login))
+
+// 使用装饰器
+export default Login
 
 

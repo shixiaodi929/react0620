@@ -14,7 +14,11 @@
  import qs from 'qs'
 //  进度条
  import NProgress from 'nprogress'
-import { promises } from "dns";
+//  进度条样式
+  import 'nprogress/nprogress.css'
+//  用于显示错误信息
+ import {message} from 'antd'
+ 
 
 
 
@@ -40,7 +44,7 @@ instance.interceptors.request.use((config) =>{
   if (data instanceof Object) {
     config.data = qs.stringify(data)
   }
-
+// 必须返回config
   return config
 })
 
@@ -58,10 +62,12 @@ instance.interceptors.response.use(
     // 显示请求进度
   NProgress.start()
 
-  Message.error('请求出错: ' + error.message)
+  message.error('请求出错: ' + error.message)
 
   // 中断promise链
   return new Promise(()=>{})
   }
 
 )
+
+export default instance
