@@ -3,10 +3,14 @@
  */
 // 常量
  import { SAVE_USER_TOKEN,REMOVE_USER_TOKEN } from '../action-types'
+ import storage from '../../utils/storage'
 
 
-const _user = JSON.parse(localStorage.getItem('user_key') || '{}')
-const _token = localStorage.getItem('token_key')
+// const _user = JSON.parse(localStorage.getItem('user_key') || '{}')
+// const _token = localStorage.getItem('token_key')
+const _user = storage.get(storage.KEYS.USER_KEY,{})
+const _token = storage.get(storage.KEYS.TOKEN_KEY,'')
+
 const initUser = { // 初始值
   user: _user,//用户信息：username和password
   token: _token,//token值：免登录用

@@ -3,13 +3,19 @@
 */
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-// 重定向
-import {Redirect} from 'react-router-dom'
-//重新登录页面
-import { removeUserToken } from '../../redux/action-creators/user'
 // 获取用户列表
 import { reqUsers } from '../../api'
+import { connect } from 'react-redux'
+
+import { removeUserToken } from '../../redux/action-creators/user'
+// 检测是否登录
+import WithCheckLogin from '../with-check-login'
+
+@connect(
+  state => ({user:state.user.user}),  // 用于显示的一般属性
+  {removeUserToken} // 用于更新状态的函数属性
+  )
+@WithCheckLogin
 
 class Admin extends Component {
 
@@ -26,10 +32,11 @@ class Admin extends Component {
   }
 
   render() {
-    // 如果当前没有登陆, 自动跳转到登陆界面
-    if (!this.props.hasLogin) {
-      return <Redirect to="/login"/>
-    }
+    // 原生写法：用装饰器
+    // // 如果当前没有登陆, 自动跳转到登陆界面
+    // if (!this.props.hasLogin) {
+    //   return <Redirect to="/login"/>
+    // }
 
     return (
       <div>
@@ -41,7 +48,4 @@ class Admin extends Component {
   }
 }
 
-export default connect(
-  state => ({user: state.user.user, hasLogin: state.user.hasLogin}),
-  {removeUserToken}
-)(Admin)
+export default Admin

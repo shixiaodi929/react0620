@@ -3,24 +3,25 @@
 */
 import React, { Component } from 'react'
 // 重定向
-import {Redirect} from 'react-router-dom'
 import { Form, Icon, Input, Button } from 'antd'
 import { connect } from 'react-redux'
 
 
 import {loginAsync} from '../../redux/action-creators/user'
 import logo from './images/logo.png'
-import './login.less'
+import './index.less'
+// 检测是否登录
+import WithCheckLogin from '../with-check-login'
 
 const { Item } = Form 
 
 // 使用装饰器，简化代码
 @connect(
-  state => ({hasLogin: state.user.hasLogin}),  // 用于显示的一般属性
+  state => ({}),  // 用于显示的一般属性
   {loginAsync} // 用于更新状态的函数属性
 )
 @Form.create()    // 相当于Login = Form.create()(Login)
-
+@WithCheckLogin
 class Login extends Component {
 
   handleSubmit = (event) => {
@@ -80,13 +81,15 @@ class Login extends Component {
 
   render() {
 
-    const {hasLogin} = this.props
-    // 如果已经登陆, 自动跳转到admin界面
-    if (hasLogin) { 
-      // this.props.history.replace('/')
-      // 重定向到admin界面
-      return <Redirect to="/"/> 
-    }
+    
+    // 原生写法：可用装饰器代替
+    // const {hasLogin} = this.props
+    // // 如果已经登陆, 自动跳转到admin界面
+    // if (hasLogin) { 
+    //   // this.props.history.replace('/')
+    //   // 重定向到admin界面
+    //   return <Redirect to="/"/> 
+    // }
 
     const { getFieldDecorator } = this.props.form;
 
