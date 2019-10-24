@@ -3,47 +3,59 @@
 */
 
 import React, { Component } from 'react'
-// 获取用户列表
-import { reqUsers } from '../../api'
-import { connect } from 'react-redux'
+import { Layout } from 'antd'
+import {Route, Switch, Redirect} from 'react-router-dom'
 
-import { removeUserToken } from '../../redux/action-creators/user'
 // 检测是否登录
 import WithCheckLogin from '../with-check-login'
+// 二级路由组件
+import LeftNav from './left-nav'
+import AdminHeader from './header'
+import Home from '../../components/home'
+import Category from '../category'
+import Product from '../product'
+import Role from '../role'
+import User from '../user'
+import Line from '../../components/charts/line'
+import Bar from '../../components/charts/bar'
+import Pie from '../../components/charts/pie'
 
-@connect(
-  state => ({user:state.user.user}),  // 用于显示的一般属性
-  {removeUserToken} // 用于更新状态的函数属性
-  )
+const { Footer, Sider, Content } = Layout
+
+
+
 @WithCheckLogin
 
 class Admin extends Component {
 
-  // 退出登录：将username、password、token值清除
-  logout = () => {
-    this.props.removeUserToken()
-  }
-
-  // 获取用户列表：
-  getUsers = async () => {
-    reqUsers()
-    const result = await reqUsers()
-    console.log('result', result)
-  }
+  
 
   render() {
-    // 原生写法：用装饰器
-    // // 如果当前没有登陆, 自动跳转到登陆界面
-    // if (!this.props.hasLogin) {
-    //   return <Redirect to="/login"/>
-    // }
-
+    
     return (
-      <div>
-        <p>Hello, {this.props.user.username}</p>
-        <button onClick={this.logout}>退出登陆</button>
-        <button onClick={this.getUsers}>获取用户列表</button>
-      </div>
+      <Layout style={{height: '100%'}}>
+        <Sider>
+          <LeftNav/>
+        </Sider>
+        <Layout>
+          <AdminHeader/>
+          <Content style={{backgroundColor: 'white', margin: '30px 15px 0 15px'}}>
+            <Switch>
+              {/* 各级子路由 */}
+              <Route path="/home" component={Home}/>
+              <Route path="/category" component={Category}/>
+              <Route path="/product" component={Product}/>
+              <Route path="/role" component={Role}/>
+              <Route path="/user" component={User}/>
+              <Route path="/charts/line" component={Line}/>
+              <Route path="/charts/bar" component={Bar}/>
+              <Route path="/charts/pie" component={Pie}/>
+              <Redirect to="/home"/>
+            </Switch>
+          </Content>
+          <Footer style={{textAlign: 'center'}}>推荐使用谷歌浏览器，可以获得更佳页面操作体验</Footer>
+        </Layout>
+      </Layout>
     )
   }
 }
