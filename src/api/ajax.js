@@ -6,8 +6,15 @@
         如果失败返回携带msg的错误, 外部具体请求处理错误
     3).统一处理请求异常, 外部调用者不用再处理请求异常
     4). 请求过程中显示请求进度的效果
+    5).验证token值
+        在请求拦截器中：发送登录请求时，保存token值
+        在响应拦截器中：进入失败的回调
+              发送请求没有token值
+              发送请求token值过期，自动跳转登录页面
+                  清空用户信息
+                  当发送多个请求时，跳转到登录页面，只显示一个信息即可
  */
-
+// 第三方文件
 //  axios发送请求
  import axios from "axios";
 //  将json参数转换为urlenclde参数
@@ -19,7 +26,12 @@
 //  进度条样式
   import 'nprogress/nprogress.css'
 
- 
+
+//自定义文件 
+ import store from "../redux/store";
+//  清空用户信息
+ import {removeUserToken} from '../redux/action-creators/user'
+ import history from '../history'
 
 
 
@@ -45,6 +57,19 @@ instance.interceptors.request.use((config) =>{
   if (data instanceof Object) {
     config.data = qs.stringify(data)
   }
+
+// 验证token值：若有token值，则保存到请求头中
+  // 取得token值
+  const token = store.getState().user.token
+  // 保存token
+  if (token) {
+    // 保存到请求头中
+    config.headers.Authorization = 'atguigu_' + token
+    // config.headers['Authorization'] = 'atguigu_' + token
+  }
+
+
+
 // 必须返回config
   return config
 })
@@ -63,7 +88,26 @@ instance.interceptors.response.use(
     // 显示请求进度
   NProgress.start()
 
-  message.error('请求出错: ' + error.message)
+// token值过期/没有token值
+    // 拿到错误信息
+  const { status, data: {msg}={} } = error.response
+  // 如果status为401, token有问题
+  if (status===401) {
+    /**
+     * 当发送多个请求时，自动跳转到登录页面，显示一个提示信息
+     */
+    if (history.location.pathname !=='/login') {
+       // 显示提示
+      message.error(msg)
+      // 删除用户信息, 自动跳转到登陆界面
+      store.dispatch(removeUserToken())
+    }
+  } else if (status===404) {
+    message.error('请求资源不存在')
+  } else {
+    // 统一的错误处理
+    message.error('请求出错: ' + error.message)
+  }
 
   // 中断promise链
   return new Promise(()=>{})

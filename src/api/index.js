@@ -10,3 +10,9 @@ export const reqLogin = ({username, password}) => ajax({
   method: 'POST',
   data: {username, password}
 })
+
+/* 获取用户列表接口 */
+export const reqUsers = () => ajax({
+  url: '/manage/user/list',
+  method: 'GET',
+})

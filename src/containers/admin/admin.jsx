@@ -8,12 +8,21 @@ import { connect } from 'react-redux'
 import {Redirect} from 'react-router-dom'
 //重新登录页面
 import { removeUserToken } from '../../redux/action-creators/user'
+// 获取用户列表
+import { reqUsers } from '../../api'
 
 class Admin extends Component {
 
   // 退出登录：将username、password、token值清除
   logout = () => {
     this.props.removeUserToken()
+  }
+
+  // 获取用户列表：
+  getUsers = async () => {
+    reqUsers()
+    const result = await reqUsers()
+    console.log('result', result)
   }
 
   render() {
@@ -26,6 +35,7 @@ class Admin extends Component {
       <div>
         <p>Hello, {this.props.user.username}</p>
         <button onClick={this.logout}>退出登陆</button>
+        <button onClick={this.getUsers}>获取用户列表</button>
       </div>
     )
   }
