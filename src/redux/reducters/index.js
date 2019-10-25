@@ -7,9 +7,9 @@ import { combineReducers } from 'redux'
 
 // 自定义文件
 import user from './user'
-import xxx from './xxx'
+import headerTitle from './header-title'
 
 export default combineReducers({
   user,
-  xxx
+  headerTitle
 })

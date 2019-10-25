@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import { Menu, Icon } from 'antd'
 import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
+import { connect } from 'react-redux'
 
 
 // 自定义文件
@@ -11,10 +12,14 @@ import './index.less'
 import logo from '../../../assets/images/logo.png'
 // menu菜单数据结构
 import menuList from '../../../config/menu-config'
+//获取标题
+import { setHeaderTitle } from '../../../redux/action-creators/header-title'
 
 
 const { SubMenu, Item } = Menu
 
+// 保存获取的菜单标题值
+@connect(state => ({headerTitle: state.headerTitle}), {setHeaderTitle})
 // 处理非路由组件，使其可以得到身上的location
 @withRouter
 
@@ -32,6 +37,13 @@ class LeftNav extends Component {
       // 如果只有一级菜单，则生成<Item>,并向pre中添加
       // 即在menu配置结构对象中，没有children
       if (!item.children) {
+        // 保存当前的标题到state中
+        // 配置结构中的key与 当前path相同并且当前的标题不相同时，则保存到state中
+        if (item.key === path && this.props.headerTitle!==item.title) {
+          this.props.setHeaderTitle(item.title)
+        }
+
+
         pre.push(
           <Item key={item.key}>
             <Link to={item.key}>
@@ -79,7 +91,8 @@ class LeftNav extends Component {
       if (!item.children) {
         return (
           <Item key={item.key}>
-            <Link to={item.key}>
+            {/* 点击时切换标题 */}
+            <Link to={item.key}  onClick={() => this.props.setHeaderTitle(item.title)}>
               <Icon type={item.icon} />
               <span>{item.title}</span>
             </Link>
