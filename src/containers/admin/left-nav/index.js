@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import { Menu, Icon } from 'antd'
 import {Link} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 
 
 // 自定义文件
@@ -14,13 +15,19 @@ import menuList from '../../../config/menu-config'
 
 const { SubMenu, Item } = Menu
 
-export default class LeftNav extends Component {
+// 处理非路由组件，使其可以得到身上的location
+@withRouter
+
+class LeftNav extends Component {
 
   // 方法二：使用reduce方法（累计）+递归调用
   getMenuNodes_reduce = (menuList) => {
     //返回生成menu标签
     // 传两个参数：第一个为上一个值，第二个为初始值
     return menuList.reduce((pre,item) => {
+
+      // 拿到当前的请求路径:用于与二级菜单对应
+      const path =this.props.location.pathname
 
       // 如果只有一级菜单，则生成<Item>,并向pre中添加
       // 即在menu配置结构对象中，没有children
@@ -34,6 +41,12 @@ export default class LeftNav extends Component {
           </Item>
         )
       }else{
+
+        // 对SubMenu中的children的key与path是否相等
+        // 相等,则代表当前请求的是该二级菜单
+        if (item.children.some(item => item.key === path)) {
+          this.openKey = item.key
+        }
         // 有二级菜单，生成<SubMenu>，并向pre中添加
         // 即在menu配置结构对象中，有children
         pre.push(
@@ -93,6 +106,11 @@ export default class LeftNav extends Component {
   }
 
   render() {
+    const menuNodes = this.getMenuNodes_reduce(menuList)
+    // 设置默认选中的菜单
+    const selectedKey = this.props.location.pathname
+    // 设置默认打开的二级菜单
+    const openKey = this.openKey
     return (
       <div className="left-nav">
         <div className="left-nav-header">
@@ -103,8 +121,11 @@ export default class LeftNav extends Component {
         <Menu
           mode="inline"
           theme="dark"
+          selectedKeys={[selectedKey]}
+          defaultOpenKeys={[openKey]}
         >
-          {this.getMenuNodes_reduce(menuList)}
+          {menuNodes}
+          {/* {this.getMenuNodes_reduce(menuList)} */}
           {/* {this.getMenuNodes(menuList)} */}
         </Menu>
 
@@ -147,4 +168,4 @@ export default class LeftNav extends Component {
   }
 }
 
-
+export default LeftNav
