@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 
 
 import {loginAsync} from '../../redux/action-creators/user'
-import logo from './images/logo.png'
+import logo from '../../assets/images/logo.png'
 import './index.less'
 // 检测是否登录
 import WithCheckLogin from '../with-check-login'
