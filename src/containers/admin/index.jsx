@@ -23,7 +23,7 @@ import Pie from '../../components/charts/pie'
 const { Footer, Sider, Content } = Layout
 
 
-
+// 是否已登录检查
 @WithCheckLogin
 
 class Admin extends Component {
